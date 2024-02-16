@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -42,4 +45,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function calls(): HasMany
+    {
+        return $this->hasMany(Call::class);
+    }
+
+    public function reminders(): HasMany
+    {
+        return $this->hasMany(Reminder::class);
+    }
+
+    public function phoneUsers(): HasMany
+    {
+        return $this->hasMany(PhoneUser::class);
+    }
+
+    /*    --      ** Relaciones HasManyThrough **     --     */
+
+    public function medicalData(): HasManyThrough
+    {
+        return $this->hasOneThrough(MedicalData::class, Call::class, 'user_id', 'id');
+    }
+
+    public function beneficiaryContacts(): HasManyThrough
+    {
+        return $this->hasManyThrough(Contact::class, Call::class, 'user_id', 'id');
+    }
 }
