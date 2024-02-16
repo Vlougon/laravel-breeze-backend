@@ -1,0 +1,294 @@
+# --------------------------------------------------------------------------------------
+#                               ** MODELS **
+# --------------------------------------------------------------------------------------
+
+models:
+  User:
+    name: string:70
+    email: string
+    password: string
+    role: enum:supervisor,assistant
+    relationships:
+      hasMany: Call, Reminder, Phone_User
+
+  Phone_User:
+    user_id: id
+    phone_number: string:9
+
+  Beneficiary:
+    name: string:35
+    first_surname: string:35
+    second_surname: string:35
+    birth_date: date
+    dni: string:9
+    social_security_number: string:12
+    rutine: text
+    gender: enum:Male,Female,Other
+    marital_status: enum:Single,Engaged,Married,Divorced,Uncoupled,Widower
+    beneficiary_type: enum:Above65,65-45,44-30,29-19,18-12,Below12
+    relationships:
+      hasMany: Call, Reminder, Phone_Beneficiary
+      hasOne: MedicalData
+      morphMany: Address
+      belongsToMany: Contact
+
+  Phone_Beneficiary:
+    beneficiary_id: id
+    phone_number: string:9
+
+  # Al tener los id de user_id y beneficiary_id no hace falta crear las realciones
+
+  Call:
+    user_id: id
+    beneficiary_id: id
+    date: date
+    time: time
+    duration: string
+    call_type: enum:rutinary,emergency
+    call_kind: enum:incoming,outgoing
+    turn: enum:morning,afternoon,night
+    answered_call: boolean
+    observations: text
+    description: text
+    contacted_112: boolean
+
+  MedicalData:
+    beneficiary_id: id
+    allergies: text
+    illnesses: text
+    morning_medication: text
+    afternoon_medication: text
+    night_medication: text
+    preferent_morning_calls_hour: time
+    preferent_afternoon_calls_hour: time
+    preferent_night_calls_hour: time
+    emergency_room_on_town: enum:Yes,No
+    firehouse_on_town: enum:Yes,No
+    police_station_on_town: enum:Yes,No
+    outpatient_clinic_on_town: enum:Yes,No
+    ambulance_on_town: enum:Yes,No
+
+  Contact:
+    name: string:35
+    first_surname: string:35
+    second_surname: string:35
+    contact_type: enum:Familiar,Friend,Partner,Other
+    relationships:
+      hasMany: Phone_Contact
+      morphMany: Address
+      belongsToMany: Beneficiary
+
+  Phone_Contact:
+    contact_id: id
+    phone_number: string:9
+
+  Address:
+    locality: string
+    postal_code: string:5
+    province: string
+    number: string
+    street: string
+    relationships:
+      morphTo: Addressable
+
+  Reminder:
+    user_id: id
+    beneficiary_id: id
+    title: string:100
+    start_date: date
+    end_date: date
+    start_time: time
+    end_time: time
+    repeat: string
+    background_color: string
+
+# --------------------------------------------------------------------------------------
+#                               ** SEEDERS **
+# --------------------------------------------------------------------------------------
+
+seeders: User, Phone_User, Beneficiary, Phone_Beneficiary, Call, MedicalData, Contact, Phone_Contact, Reminder
+
+# --------------------------------------------------------------------------------------
+#                               ** CONTROLLERS **
+# --------------------------------------------------------------------------------------
+
+controllers:
+  Api\UserController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: name, password, role, email
+      save: User
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: User
+      respond: 200
+    destroy:
+      delete: User
+      respond: 204
+    error:
+      respond: 400
+
+  Api\PhoneUserController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: user_id, phone_number
+      save: PhoneUser
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: PhoneUser
+      respond: 200
+    destroy:
+      delete: PhoneUser
+      respond: 204
+    error:
+      respond: 400
+
+  Api\BeneficiaryController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: name, gender, marital_status, beneficiary_type, social_security_number, rutine, second_surname, birth_date
+      save: Beneficiary
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: Beneficiary
+      respond: 200
+    destroy:
+      delete: Beneficiary
+      respond: 204
+    error:
+      respond: 400
+
+  Api\PhoneBeneficiaryController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: beneficiary_id, phone_number
+      save: PhoneBeneficiary
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: PhoneBeneficiary
+      respond: 200
+    destroy:
+      delete: PhoneBeneficiary
+      respond: 204
+    error:
+      respond: 400
+
+  Api\CallController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: user_id, beneficiary_id, date_and_time, duration, call_type, turn, answered_call, observations, time
+      save: Call
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: Call
+      respond: 200
+    destroy:
+      delete: Call
+      respond: 204
+    error:
+      respond: 400
+
+  Api\MedicalDataController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: beneficiary_id, allergies, morning_medication, afternoon_medication, night_medication, emergency_room_on_town, firehouse_on_town, police_station_on_town, outpatient_clinic_on_town, ambulance_on_town, illnesses, preferent_morning_calls_hour, preferent_afternoon_calls_hour, preferent_night_calls_hour
+      save: MedicalData
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: MedicalData
+      respond: 200
+    destroy:
+      delete: MedicalData
+      respond: 204
+
+  Api\ContactController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: name, first_name, second_surname, contact_type
+      save: Contact
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: Contact
+      respond: 200
+    destroy:
+      delete: Contact
+      respond: 204
+
+  Api\PhoneContactController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: contact_id, phone_number
+      save: PhoneContact
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: PhoneContact
+      respond: 200
+    destroy:
+      delete: PhoneContact
+      respond: 204
+
+  Api\AddressController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: locality, postal_code, province, number, street
+      save: Address
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: Address
+      respond: 200
+    destroy:
+      delete: Address
+      respond: 204
+
+  Api\ReminderController:
+    index:
+      query: all
+      respond: 200
+    store:
+      validate: user_id, beneficiary_id, title, terminated, observations, start_date, end_date, start_time, end_time
+      save: Reminder
+      respond: 201
+    show:
+      respond: 200
+    update:
+      update: Reminder
+      respond: 200
+    destroy:
+      delete: Reminder
+      respond: 204
