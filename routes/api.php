@@ -59,5 +59,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // Rutas para Address
         Route::apiResource('addresses', AddressController::class);
+
+        //Custom Routes
+        Route::get('userPhone/{user}', [PhoneUserController::class, 'userPhone']);
     });
 });

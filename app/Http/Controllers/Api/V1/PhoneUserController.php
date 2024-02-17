@@ -6,6 +6,7 @@ use App\Models\PhoneUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PhoneUserRequest;
 use App\Http\Resources\PhoneUserResource;
+use App\Models\User;
 
 class PhoneUserController extends Controller
 {
@@ -89,6 +90,24 @@ class PhoneUserController extends Controller
             'message' => '¡Teléfono de Usuario Eliminado!',
             'data' => $phoneUser,
         ], 204);
+    }
+
+    public function userPhone(User $user)
+    {
+        if (is_null($user)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado al Usuairo con Teléfono!',
+            ], 404);
+        }
+
+        $userPhone = PhoneUserResource::collection($user->phoneUsers);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Teléfono de Usuario Encontrado!',
+            'data' => $userPhone,
+        ], 200);
     }
 
     public function error()
