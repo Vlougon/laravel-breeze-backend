@@ -30,11 +30,14 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('V1')->group(function () {
-        // Rutas para User
-        Route::apiResource('users', UserController::class);
 
-        // Rutas para Phone_User
-        Route::apiResource('phone_users', PhoneUserController::class);
+        Route::middleware('can:viewAssistants,App\Models\User')->group(function () {
+            // Rutas para User
+            Route::apiResource('users', UserController::class);
+
+            // Rutas para Phone_User
+            Route::apiResource('phone_users', PhoneUserController::class);
+        });
 
         // Rutas para Beneficiary
         Route::apiResource('beneficiaries', BeneficiaryController::class);
