@@ -65,5 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         //Custom Routes
         Route::get('userPhone/{user}', [PhoneUserController::class, 'userPhone']);
+
+        Route::get('beneficiaryPhone/{beneficiary}', [PhoneBeneficiaryController::class, 'userBeneficiary']);
     });
 });

@@ -6,6 +6,7 @@ use App\Models\PhoneBeneficiary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PhoneBeneficiaryRequest;
 use App\Http\Resources\PhoneBeneficiaryResource;
+use App\Models\Beneficiary;
 use Illuminate\Http\Request;
 
 class PhoneBeneficiaryController extends Controller
@@ -90,6 +91,24 @@ class PhoneBeneficiaryController extends Controller
             'message' => '¡Teléfono de Beneficiario Eliminado!',
             'data' => $phoneBeneficiary,
         ], 204);
+    }
+
+    public function userBeneficiary(Beneficiary $beneficiary)
+    {
+        if (is_null($beneficiary)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado al Beneficiario con Teléfono!',
+            ], 404);
+        }
+
+        $beneficiaryPhone = PhoneBeneficiaryResource::collection($beneficiary->phoneBeneficiaries);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Teléfono de Beneficiario Encontrado!',
+            'data' => $beneficiaryPhone,
+        ], 200);
     }
 
     public function error()
