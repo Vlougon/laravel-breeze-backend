@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AddressRequest;
 use App\Http\Resources\AddressResource;
 use App\Models\Address;
+use App\Models\Beneficiary;
+use App\Models\Contact;
 
 class AddressController extends Controller
 {
@@ -91,6 +93,42 @@ class AddressController extends Controller
         ], 204);
     }
 
+    public function beneficiaryAddress(Beneficiary $beneficiary)
+    {
+        if (is_null($beneficiary)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado la Dirección del Beneficiario!',
+            ], 404);
+        }
+
+        $beneficiaryAddress = AddressResource::collection($beneficiary->addresses);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Dirección del Beneficiario Encontrado!',
+            'data' => $beneficiaryAddress,
+        ], 200);
+    }
+
+    public function contactAddress(Contact $contact)
+    {
+        if (is_null($contact)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado la Dirección del Contacto!',
+            ], 404);
+        }
+
+        $contactAddress = AddressResource::collection($contact->addresses);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Dirección del Contacto Encontrado!',
+            'data' => $contactAddress,
+        ], 200);
+    }
+
     public function error()
     {
         return response()->json([
@@ -99,4 +137,3 @@ class AddressController extends Controller
         ], 400);
     }
 }
-
