@@ -25,6 +25,8 @@ class AddressRequest extends FormRequest
             'province' => 'required|string',
             'number' => 'required|string',
             'street' => 'required|string',
+            'addressable_type' => 'required|string|in:App\\Models\\Beneficiary,App\\Models\\Contact',
+            'addressable_id' => 'required|integer|exists:' . $this->addressable_type . ',id',
         ];
     }
 
@@ -36,6 +38,8 @@ class AddressRequest extends FormRequest
             'province.required' => 'Es Necesario Especificar una Provincia',
             'number.required' => 'Es Necesario Indicar un Número',
             'street.required' => 'Es Necesario Especificar una Calle',
+            'addressable_type.required' => 'Es Necesario Un Tipo de Dirección',
+            'addressable_id.required' => 'Es Necesario el ID del Direccionado',
         ];
     }
 }

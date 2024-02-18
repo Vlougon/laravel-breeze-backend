@@ -21,6 +21,8 @@ class Address extends Model
         'province',
         'number',
         'street',
+        'addressable_type',
+        'addressable_id',
     ];
 
     /**
