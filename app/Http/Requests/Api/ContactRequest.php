@@ -22,7 +22,7 @@ class ContactRequest extends FormRequest
         return [
             'name' => 'required|string|max:35',
             'first_surname' => 'required|string|max:35',
-            'second_surname' => 'string|max:35',
+            'second_surname' => 'string|max:35|nullable',
             'contact_type' => 'required|in:Familiar,Friend,Partner,Other',
         ];
     }

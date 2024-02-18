@@ -30,8 +30,8 @@ class CallRequest extends FormRequest
             'turn' => 'required|in:morning,afternoon,night',
             'answered_call' => 'required|boolean',
             'observations' => 'required|string',
-            'description' => 'string',
-            'contacted_112' => 'boolean',
+            'description' => 'string|nullable',
+            'contacted_112' => 'boolean|nullable',
         ];
     }
 

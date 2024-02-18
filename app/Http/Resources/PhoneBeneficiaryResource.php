@@ -15,6 +15,7 @@ class PhoneBeneficiaryResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'beneficiary_id' => new BeneficiaryResource($this->beneficiary),
             'phone_number' => $this->phone_number,
         ];

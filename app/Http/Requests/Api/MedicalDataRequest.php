@@ -21,11 +21,11 @@ class MedicalDataRequest extends FormRequest
     {
         return [
             'beneficiary_id' => 'required|integer|exists:beneficiaries,id',
-            'allergies' => 'string',
-            'illnesses' => 'string',
-            'morning_medication' => 'string',
-            'afternoon_medication' => 'string',
-            'night_medication' => 'string',
+            'allergies' => 'string|nullable',
+            'illnesses' => 'string|nullable',
+            'morning_medication' => 'string|nullable',
+            'afternoon_medication' => 'string|nullable',
+            'night_medication' => 'string|nullable',
             'preferent_morning_calls_hour' => 'required',
             'preferent_afternoon_calls_hour' => 'required',
             'preferent_night_calls_hour' => 'required',
