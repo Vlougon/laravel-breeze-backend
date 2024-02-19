@@ -9,9 +9,8 @@ class BeneficiaryContactResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'beneficiary_id' => new BeneficiaryResource($this->beneficiary_id),
-            'contact_id' => new ContactResource($this->contact_id),
+            'beneficiary_id' => new BeneficiaryResource($this->beneficiaries),
+            'contact_id' => new ContactResource($this->contacts),
         ];
     }
 }
