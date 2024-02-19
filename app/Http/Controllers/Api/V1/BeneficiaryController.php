@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\BeneficiaryRequest;
 use App\Http\Resources\BeneficiaryResource;
+use App\Http\Resources\ContactResource;
 use App\Models\Beneficiary;
 
 class BeneficiaryController extends Controller
@@ -89,6 +90,25 @@ class BeneficiaryController extends Controller
             'message' => '¡Beneficiario Eliminado!',
             'data' => $beneficiary,
         ], 204);
+    }
+
+    public function contactsBeneficiary(Beneficiary $beneficiary)
+    {
+        if (is_null($beneficiary)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado el Beneficiario!',
+            ], 404);
+        }
+
+        $contactsBeneficiary = $beneficiary->contacts;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Mostrando Contactos del Beneficiario ' . $beneficiary->name . '!',
+            'data' => $contactsBeneficiary,
+            'beneficiary' => $beneficiary->name,
+        ], 200);
     }
 
     public function error()

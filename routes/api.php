@@ -77,5 +77,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('beneficiaryAddress/{beneficiary}', [AddressController::class, 'beneficiaryAddress']);
 
         Route::get('contactAddress/{contact}', [AddressController::class, 'contactAddress']);
+
+        Route::get('beneficiaryContacts/{beneficiary}', [BeneficiaryController::class, 'contactsBeneficiary']);
     });
 });
