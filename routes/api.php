@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\PhoneContactController;
 use App\Http\Controllers\Api\V1\ReminderController;
 use App\Http\Controllers\Api\V1\AddressController;
+use App\Http\Controllers\Api\V1\BeneficiaryContactController;
 use App\Http\Controllers\Api\V1\UserController;
 
 /*
@@ -62,6 +63,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // Rutas para Address
         Route::apiResource('addresses', AddressController::class);
+
+        // Rutas para los Contactos de Beneficiarios
+        Route::apiResource('beneficiary_contacts', BeneficiaryContactController::class);
 
         //Custom Routes
         Route::get('userPhone/{user}', [PhoneUserController::class, 'userPhone']);

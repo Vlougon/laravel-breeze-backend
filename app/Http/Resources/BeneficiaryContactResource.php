@@ -10,8 +10,8 @@ class BeneficiaryContactResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'beneficiary_id' => new BeneficiaryResource($this->beneficiary),
-            'contact_id' => new ContactResource($this->contact),
+            'beneficiary_id' => new BeneficiaryResource($this->beneficiary_id),
+            'contact_id' => new ContactResource($this->contact_id),
         ];
     }
 }
