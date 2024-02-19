@@ -6,6 +6,7 @@ use App\Models\PhoneContact;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PhoneContactRequest;
 use App\Http\Resources\PhoneContactResource;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class PhoneContactController extends Controller
@@ -90,6 +91,24 @@ class PhoneContactController extends Controller
             'message' => '¡Teléfono de Contacto Eliminado!',
             'data' => $phoneContact,
         ], 204);
+    }
+
+    public function contactPhone(Contact $contact)
+    {
+        if (is_null($contact)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado al Contacto con Teléfono!',
+            ], 404);
+        }
+
+        $contactPhone = PhoneContactResource::collection($contact->phoneContacts);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Teléfono de Contactp Encontrado!',
+            'data' => $contactPhone,
+        ], 200);
     }
 
     public function error()
