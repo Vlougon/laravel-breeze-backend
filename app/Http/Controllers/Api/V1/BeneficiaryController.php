@@ -116,7 +116,7 @@ class BeneficiaryController extends Controller
     {
         $fullbeneficiary = DB::table('beneficiaries')
             ->leftJoin('medical_datas', 'beneficiaries.id', '=', 'medical_datas.beneficiary_id')
-            ->select('beneficiaries.id', 'beneficiaries.name', 'beneficiaries.dni', 'medical_datas.beneficiary_id as medicaldata_id')
+            ->select('beneficiaries.id', 'beneficiaries.name', 'beneficiaries.dni', 'medical_datas.id as medicaldata_id')
             ->get();
 
         if ($fullbeneficiary->isEmpty()) {

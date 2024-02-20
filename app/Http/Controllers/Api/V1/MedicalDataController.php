@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\MedicalDataRequest;
 use App\Http\Resources\MedicalDataResource;
+use App\Models\Beneficiary;
 use App\Models\MedicalData;
 
 class MedicalDataController extends Controller
@@ -30,6 +31,16 @@ class MedicalDataController extends Controller
 
     public function store(MedicalDataRequest $request)
     {
+        $beneficiaryMedicalData = Beneficiary::find($request->beneficiary_id)->medicalData;
+
+        if (is_object($beneficiaryMedicalData)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡Este Beneficiario Ya tiene Datos Médicos!',
+                'medical_data_id' => $beneficiaryMedicalData->id,
+            ], 409);
+        }
+
         $medicalData = MedicalData::create($request->validated());
 
         return response()->json([
