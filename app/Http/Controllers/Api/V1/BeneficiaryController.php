@@ -134,6 +134,17 @@ class BeneficiaryController extends Controller
         ], 200);
     }
 
+    public function firstBeneficiary()
+    {
+        $beneficiary = Beneficiary::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '¡Contacto de Beneficiario Obtenido!',
+            'data' => $beneficiary,
+        ], 200);
+    }
+
     public function error()
     {
         return response()->json([
