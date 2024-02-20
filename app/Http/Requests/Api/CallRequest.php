@@ -24,7 +24,7 @@ class CallRequest extends FormRequest
             'beneficiary_id' => 'required|integer|exists:beneficiaries,id',
             'date' => 'required|date',
             'time' => 'required',
-            'duration' => 'required|string',
+            'duration' => 'required|integer',
             'call_type' => 'required|in:rutinary,emergency',
             'call_kind' => 'required|in:incoming,outgoing',
             'turn' => 'required|in:morning,afternoon,night',
