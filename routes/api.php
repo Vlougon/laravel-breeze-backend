@@ -50,7 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('calls', CallController::class);
 
         // Rutas para MedicalData
-        Route::apiResource('medical_data', MedicalDataController::class);
+        Route::apiResource('medical_datum', MedicalDataController::class);
 
         // Rutas para Contact
         Route::apiResource('contacts', ContactController::class);
