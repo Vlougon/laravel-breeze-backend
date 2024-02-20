@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\BeneficiaryRequest;
 use App\Http\Resources\BeneficiaryResource;
 use App\Http\Resources\ContactResource;
+use Illuminate\Support\Facades\DB;
 use App\Models\Beneficiary;
 
 class BeneficiaryController extends Controller
@@ -108,6 +109,28 @@ class BeneficiaryController extends Controller
             'message' => '!Mostrando Contactos del Beneficiario ' . $beneficiary->name . '!',
             'data' => $contactsBeneficiary,
             'beneficiary' => $beneficiary->name,
+        ], 200);
+    }
+
+    public function fullBeneficiary()
+    {
+        $fullbeneficiary = DB::table('beneficiaries')
+            ->leftJoin('medical_data', 'beneficiaries.id', '=', 'medical_data.beneficiary_id')
+            ->select('beneficiaries.id', 'beneficiaries.name', 'beneficiaries.dni', 'medical_data.beneficiary_id as medicaldata_id')
+            ->get();
+
+        if ($fullbeneficiary->isEmpty()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se Encontraron Beneficiarios ni sus Datos Médicos!',
+                'data' => [],
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Mostrando Datos del Beneficiario con Datos Médicos!',
+            'data' => $fullbeneficiary,
         ], 200);
     }
 
