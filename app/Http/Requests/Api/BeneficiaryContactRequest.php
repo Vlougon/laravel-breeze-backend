@@ -15,7 +15,7 @@ class BeneficiaryContactRequest extends FormRequest
     {
         return [
             'beneficiary_id' => 'required|exists:beneficiaries,id',
-            'contact_id' => 'required|exists:contact,id',
+            'contact_id' => 'required|exists:contacts,id',
         ];
     }
 

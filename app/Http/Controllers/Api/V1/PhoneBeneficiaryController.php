@@ -93,7 +93,7 @@ class PhoneBeneficiaryController extends Controller
         ], 204);
     }
 
-    public function userBeneficiary(Beneficiary $beneficiary)
+    public function beneficiaryPhone(Beneficiary $beneficiary)
     {
         if (is_null($beneficiary)) {
             return response()->json([

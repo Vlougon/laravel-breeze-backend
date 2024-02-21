@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\BeneficiaryRequest;
 use App\Http\Resources\BeneficiaryResource;
+use App\Http\Resources\ContactResource;
+use Illuminate\Support\Facades\DB;
 use App\Models\Beneficiary;
 
 class BeneficiaryController extends Controller
@@ -89,6 +91,58 @@ class BeneficiaryController extends Controller
             'message' => '¡Beneficiario Eliminado!',
             'data' => $beneficiary,
         ], 204);
+    }
+
+    public function contactsBeneficiary(Beneficiary $beneficiary)
+    {
+        if (is_null($beneficiary)) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se ha encontrado el Beneficiario!',
+            ], 404);
+        }
+
+        $contactsBeneficiary = $beneficiary->contacts;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Mostrando Contactos del Beneficiario ' . $beneficiary->name . '!',
+            'data' => $contactsBeneficiary,
+            'beneficiary' => $beneficiary->name,
+        ], 200);
+    }
+
+    public function fullBeneficiary()
+    {
+        $fullbeneficiary = DB::table('beneficiaries')
+            ->leftJoin('medical_datas', 'beneficiaries.id', '=', 'medical_datas.beneficiary_id')
+            ->select('beneficiaries.id', 'beneficiaries.name', 'beneficiaries.dni', 'medical_datas.id as medicaldata_id')
+            ->get();
+
+        if ($fullbeneficiary->isEmpty()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se Encontraron Beneficiarios ni sus Datos Médicos!',
+                'data' => [],
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '!Mostrando Datos del Beneficiario con Datos Médicos!',
+            'data' => $fullbeneficiary,
+        ], 200);
+    }
+
+    public function firstBeneficiary()
+    {
+        $beneficiary = Beneficiary::first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '¡Contacto de Beneficiario Obtenido!',
+            'data' => $beneficiary,
+        ], 200);
     }
 
     public function error()
