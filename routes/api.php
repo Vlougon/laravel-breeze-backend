@@ -96,5 +96,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('ultimateincomingcall', [CallController::class, 'ultimateIncomingCall']);
 
         Route::get('ultimateoutgoingcall', [CallController::class, 'ultimateOutgoingCall']);
+
+        Route::get('ultimatebeneficiary', [BeneficiaryController::class, 'ultimateBeneficiary']);
     });
 });

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CallRequest;
-use App\Http\Resources\CallResource;
 use App\Models\Call;
 use App\Queries\CallQuery;
 
