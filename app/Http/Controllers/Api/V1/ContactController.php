@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ContactRequest;
 use App\Http\Resources\ContactResource;
+use Illuminate\Support\Facades\DB;
 use App\Models\Contact;
 
 class ContactController extends Controller
@@ -91,9 +92,24 @@ class ContactController extends Controller
         ], 204);
     }
 
-    public function getAllContactsDetails ()
+    public function getAllContactsDetails()
     {
-        $contacts = ContactResource::collection(Contact::all());
+        $contacts = DB::table('contacts')
+            ->join('beneficiary_contacts', 'contacts.id', '=', 'beneficiary_contacts.contact_id')
+            ->join('beneficiaries', 'beneficiaries.id', '=', 'beneficiary_contacts.beneficiary_id')
+            ->leftJoin('phone_beneficiaries', 'beneficiaries.id', '=', 'phone_beneficiaries.beneficiary_id')
+            ->leftJoin('addresses', 'contacts.id', '=', 'addresses.addressable_id')
+            ->select(
+                'contacts.name as NameContact',
+                'contacts.contact_type as TypeContact',
+                'beneficiaries.name as NameBeneficiary',
+                'beneficiaries.dni as DNIBeneficiary',
+                'phone_beneficiaries.phone_number as PhoneBeneficiary',
+                'addresses.locality as Locality',
+                'addresses.province as Province',
+                'addresses.street as Street'
+            )
+            ->get();
 
         if ($contacts->isEmpty()) {
             return response()->json([

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CallRequest;
 use App\Http\Resources\CallResource;
 use App\Models\Call;
+use Illuminate\Support\Facades\DB;
 
 class CallController extends Controller
 {
@@ -90,6 +91,48 @@ class CallController extends Controller
             'message' => '¡Llamada Eliminada!',
             'data' => $call,
         ], 204);
+    }
+
+    public function GetOutGoing()
+    {
+        $calls = CallResource::collection(Call::latest()->where('call_kind', '=', 'outgoing')->get());
+
+
+
+        if ($calls->isEmpty()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se Encontraron Llamadas Outgoing!',
+                'data' => [],
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '¡Llamadas Encontradas Outgoing!',
+            'data' => $calls,
+        ], 200);
+    }
+
+    public function GetInGoing()
+    {
+        $calls = CallResource::collection(Call::latest()->where('call_kind', '=', 'incoming')->get());
+
+
+
+        if ($calls->isEmpty()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se Encontraron Llamadas Ingoing!',
+                'data' => [],
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '¡Llamadas Encontradas Ingoing!',
+            'data' => $calls,
+        ], 200);
     }
 
     public function error()
