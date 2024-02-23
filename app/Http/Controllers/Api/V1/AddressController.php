@@ -4,136 +4,73 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AddressRequest;
-use App\Http\Resources\AddressResource;
 use App\Models\Address;
 use App\Models\Beneficiary;
 use App\Models\Contact;
+use App\Queries\AddressQuery;
 
 class AddressController extends Controller
 {
     public function index()
     {
-        $addresses = AddressResource::collection(Address::latest()->get());
+        $response = AddressQuery::getAllAddresses();
 
-        if ($addresses->isEmpty()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se Encontraron Direcciones!',
-                'data' => [],
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Direcciones Encontradas!',
-            'data' => $addresses,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function store(AddressRequest $request)
     {
-        $address = Address::create($request->validated());
+        $response = AddressQuery::createAddress($request);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Dirección Añadida Exitosamente!',
-            'data' => new AddressResource($address),
-        ], 201);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function show(Address $address)
     {
-        if (is_null($address)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Dirección!',
-            ], 404);
-        }
+        $response = AddressQuery::showAddress($address);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Mostrando la Dirección!',
-            'data' => new AddressResource($address),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function update(AddressRequest $request, Address $address)
     {
-        if (is_null($address)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Dirección para Actualizar!',
-            ], 404);
-        }
+        $response = AddressQuery::updateAddress($request, $address);
 
-        $address->update($request->validated());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Dirección Actualizada!',
-            'data' => new AddressResource($address),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function destroy(Address $address)
     {
-        if (is_null($address)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Dirección para Eliminar!',
-            ], 404);
-        }
+        $response = AddressQuery::deleteAddress($address);
 
-        $address->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Dirección Eliminada!',
-            'data' => $address,
-        ], 204);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function beneficiaryAddress(Beneficiary $beneficiary)
     {
-        if (is_null($beneficiary)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Dirección del Beneficiario!',
-            ], 404);
-        }
+        $response = AddressQuery::getBeneficiaryAddress($beneficiary);
 
-        $beneficiaryAddress = AddressResource::collection($beneficiary->addresses);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Dirección del Beneficiario Encontrado!',
-            'data' => $beneficiaryAddress,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function contactAddress(Contact $contact)
     {
-        if (is_null($contact)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Dirección del Contacto!',
-            ], 404);
-        }
+        $response = AddressQuery::getContactAddress($contact);
 
-        $contactAddress = AddressResource::collection($contact->addresses);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Dirección del Contacto Encontrado!',
-            'data' => $contactAddress,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function error()
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => '¡Ha Ocurrido un Error con los Métodos del Controlador para Dirección!',
-        ], 400);
+        $response = AddressQuery::errorHandler();
+
+        return response()->json($response->data, $response->status);
     }
 }
