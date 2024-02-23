@@ -5,117 +5,63 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\PhoneBeneficiary;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PhoneBeneficiaryRequest;
-use App\Http\Resources\PhoneBeneficiaryResource;
 use App\Models\Beneficiary;
-use Illuminate\Http\Request;
+use App\Queries\PhoneBeneficiaryQuery;
 
 class PhoneBeneficiaryController extends Controller
 {
     public function index()
     {
-        $phoneBeneficiaries = PhoneBeneficiaryResource::collection(PhoneBeneficiary::all());
+        $response = PhoneBeneficiaryQuery::getAllPhonesBeneficiary();
 
-        if ($phoneBeneficiaries->isEmpty()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se Encontraron Teléfonos de Beneficiarios!',
-                'data' => [],
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Estos son los Teléfonos de los Beneficiarios!',
-            'data' => $phoneBeneficiaries,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function store(PhoneBeneficiaryRequest $request)
     {
-        $phoneBeneficiary = PhoneBeneficiary::create($request->validated());
+        $response = PhoneBeneficiaryQuery::createPhoneBeneficiary($request);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Añadido Nuevo Teléfono para el Beneficiario!',
-            'data' => new PhoneBeneficiaryResource($phoneBeneficiary),
-        ], 201);
+        return response()->json($response->data, $response->status);
     }
 
-    public function show(PhoneBeneficiaryResource $phoneBeneficiary)
+
+    public function show(PhoneBeneficiaryRequest $phoneBeneficiary)
     {
-        if (is_null($phoneBeneficiary)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono del Beneficiario!',
-            ], 404);
-        }
+        $response = PhoneBeneficiaryQuery::showPhoneBeneficiary($phoneBeneficiary);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Teléfono Encontrado!',
-            'data' => new PhoneBeneficiaryResource($phoneBeneficiary),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function update(PhoneBeneficiaryRequest $request, PhoneBeneficiary $phoneBeneficiary)
     {
-        if (is_null($phoneBeneficiary)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono del Beneficiario para Actualizar!',
-            ], 404);
-        }
+        $response = PhoneBeneficiaryQuery::updatePhoneBeneficiary($request, $phoneBeneficiary);
 
-        $phoneBeneficiary->update($request->all());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Teléfono de Beneficiario Actualizado!',
-            'data' => new PhoneBeneficiaryResource($phoneBeneficiary),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function destroy(PhoneBeneficiary $phoneBeneficiary)
     {
-        if (is_null($phoneBeneficiary)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono del Beneficiario para Eliminar!',
-            ], 404);
-        }
+        $response = PhoneBeneficiaryQuery::deletePhoneBeneficiary($phoneBeneficiary);
 
-        $phoneBeneficiary->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Teléfono de Beneficiario Eliminado!',
-            'data' => $phoneBeneficiary,
-        ], 204);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function beneficiaryPhone(Beneficiary $beneficiary)
     {
-        if (is_null($beneficiary)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado al Beneficiario con Teléfono!',
-            ], 404);
-        }
+        $response = PhoneBeneficiaryQuery::getBeneficiaryPhone($beneficiary);
 
-        $beneficiaryPhone = PhoneBeneficiaryResource::collection($beneficiary->phoneBeneficiaries);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Teléfono de Beneficiario Encontrado!',
-            'data' => $beneficiaryPhone,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function error()
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => '¡Ha Ocurrido un Error con los Métodos del Controlador para los Teléfonos de Beneficiarios!',
-        ], 400);
+        $response = PhoneBeneficiaryQuery::errorHandler();
+
+        return response()->json($response->data, $response->status);
     }
 }
