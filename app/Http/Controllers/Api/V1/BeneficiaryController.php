@@ -145,6 +145,36 @@ class BeneficiaryController extends Controller
         ], 200);
     }
 
+    public function getAllBeneficiariesWithDetails()
+    {
+
+        $beneficiary = DB::table('beneficiaries')
+        ->leftJoin('medical_datas', 'beneficiaries.id', '=', 'medical_datas.beneficiary_id')
+        ->leftJoin('phone_beneficiaries', 'beneficiaries.id', '=', 'phone_beneficiaries.beneficiary_id')
+        ->leftJoin('addresses', 'beneficiaries.id', '=', 'addresses.addressable_id')
+        ->select('beneficiaries.name as Name', 'beneficiaries.dni as DNI', 'beneficiaries.social_security_number as NSS', 
+                'medical_datas.allergies as Allergies', 'medical_datas.illnesses as Illnesses',
+                'phone_beneficiaries.phone_number as Phone ', 
+                'addresses.locality as Locality', 'addresses.province as Province', 'addresses.street as Street')
+        ->get();
+
+
+        if ($beneficiary->isEmpty()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se Encontraron Beneficiarios!',
+                'data' => [],
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '¡Beneficiarios Encontrados!',
+            'data' => $beneficiary,
+        ], 200);
+        
+    }
+
     public function error()
     {
         return response()->json([

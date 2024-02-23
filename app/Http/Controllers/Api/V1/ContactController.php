@@ -91,6 +91,25 @@ class ContactController extends Controller
         ], 204);
     }
 
+    public function getAllContactsDetails ()
+    {
+        $contacts = ContactResource::collection(Contact::all());
+
+        if ($contacts->isEmpty()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => '¡No se Encontraron Contactos!',
+                'data' => [],
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => '¡Contactos Encontrados!',
+            'data' => $contacts,
+        ], 200);
+    }
+
     public function error()
     {
         return response()->json([
