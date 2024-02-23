@@ -29,6 +29,6 @@ class GoogleController extends Controller
 
         Auth::login($user);
 
-        return redirect('http://localhost:3000/login');
+        return redirect('https://victorreact.informaticamajada.es/login');
     }
 }
