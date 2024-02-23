@@ -133,7 +133,7 @@ class ReminderQuery
 
     public static function ultimateReminderData()
     {
-        $reminder = DB::table('reminders')
+        $reminders = DB::table('reminders')
             ->join('users', 'reminders.user_id', '=', 'users.id')
             ->join('beneficiaries', 'reminders.beneficiary_id', '=', 'beneficiaries.id')
             ->select(
@@ -143,26 +143,36 @@ class ReminderQuery
                 'reminders.end_date',
                 'reminders.end_time',
                 'reminders.repeat',
-                'users.name',
+                'users.name as user_name',
                 'users.email',
                 'users.role',
-                'beneficiaries.name',
+                'beneficiaries.name as beneficiary_name',
             )
             ->get();
-
         $response = new stdClass();
+
+        if ($reminders->isEmpty()) {
+            $response->data = [
+                'status' => 'failed',
+                'message' => '¡No se Encontraron los Recordatorios!',
+                'data' => [],
+            ];
+            $response->status = 404;
+
+            return $response;
+        }
 
         $response->data = [
             'status' => 'success',
             'message' => '¡Mostrando los Datos más Importantes de los Recordatorios!',
-            'data' => $reminder,
+            'data' => $reminders,
         ];
         $response->status = 200;
 
         return $response;
     }
 
-    
+
     public static function errorHandler()
     {
         $response = new stdClass();

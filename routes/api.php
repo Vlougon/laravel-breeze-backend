@@ -88,5 +88,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('ultimateuser', [UserController::class, 'ultimateUser']);
 
         Route::get('ultimatereminder', [ReminderController::class, 'ultimateReminder']);
+
+        Route::get('ultimatecontact', [ContactController::class, 'ultimateContact']);
     });
 });
