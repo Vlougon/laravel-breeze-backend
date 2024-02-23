@@ -90,5 +90,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('ultimatereminder', [ReminderController::class, 'ultimateReminder']);
 
         Route::get('ultimatecontact', [ContactController::class, 'ultimateContact']);
+
+        Route::get('ultimatecall', [CallController::class, 'ultimateCall']);
+
+        Route::get('ultimateincomingcall', [CallController::class, 'ultimateIncomingCall']);
+
+        Route::get('ultimateoutgoingcall', [CallController::class, 'ultimateOutgoingCall']);
     });
 });

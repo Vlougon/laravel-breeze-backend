@@ -6,97 +6,78 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CallRequest;
 use App\Http\Resources\CallResource;
 use App\Models\Call;
+use App\Queries\CallQuery;
 
 class CallController extends Controller
 {
     public function index()
     {
-        $calls = CallResource::collection(Call::latest()->get());
+        $response = CallQuery::getAllCalls();
 
-        if ($calls->isEmpty()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se Encontraron Llamadas!',
-                'data' => [],
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Llamadas Encontradas!',
-            'data' => $calls,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
 
 
     public function store(CallRequest $request)
     {
-        $call = Call::create($request->validated());
+        $response = CallQuery::createCall($request);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Llamada Guardada!',
-            'data' => new CallResource($call),
-        ], 201);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function show(Call $call)
     {
-        if (is_null($call)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Llamada!',
-            ], 404);
-        }
+        $response = CallQuery::showCall($call);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Llamada Encontrada!',
-            'data' => new CallResource($call),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function update(CallRequest $request, Call $call)
     {
-        if (is_null($call)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Llamada para Actualizar!',
-            ], 404);
-        }
+        $response = CallQuery::updateCall($request, $call);
 
-        $call->update($request->validated());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Llamada Actualizada!',
-            'data' => new CallResource($call),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
 
+    
     public function destroy(Call $call)
     {
-        if (is_null($call)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado la Llamada para Elimminar!',
-            ], 404);
-        }
+        $response = CallQuery::deleteCall($call);
 
-        $call->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Llamada Eliminada!',
-            'data' => $call,
-        ], 204);
+        return response()->json($response->data, $response->status);
     }
+
+
+    public function ultimateCall()
+    {
+        $response = CallQuery::ultimateCallData();
+
+        return response()->json($response->data, $response->status);
+    }
+
+
+    public function ultimateIncomingCall()
+    {
+        $response = CallQuery::ultimateIncomingCallData();
+
+        return response()->json($response->data, $response->status);
+    }
+
+
+    public function ultimateOutgoingCall()
+    {
+        $response = CallQuery::ultimateOutgoingCallData();
+
+        return response()->json($response->data, $response->status);
+    }
+
 
     public function error()
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => '¡Ha Ocurrido un Error con los Métodos del Controlador para Llamadas!',
-        ], 400);
+        $response = CallQuery::errorHandler();
+
+        return response()->json($response->data, $response->status);
     }
 }
