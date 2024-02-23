@@ -67,7 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // Rutas para los Contactos de Beneficiarios
         Route::apiResource('beneficiary_contacts', BeneficiaryContactController::class);
 
-        //Custom Routes
+        // Custom Routes
         Route::get('userPhone/{user}', [PhoneUserController::class, 'userPhone']);
 
         Route::get('beneficiaryPhone/{beneficiary}', [PhoneBeneficiaryController::class, 'beneficiaryPhone']);
@@ -83,5 +83,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('fullbeneficiary', [BeneficiaryController::class, 'fullBeneficiary']);
 
         Route::get('firstbeneficiary', [BeneficiaryController::class, 'firstBeneficiary']);
+
+        // Special Routes
+        Route::get('ultimateUser', [UserController::class, 'ultimateUser']);
+
     });
 });
