@@ -139,9 +139,9 @@ class ContactQuery
             ->leftJoin('addresses', 'contacts.id', '=', 'addresses.addressable_id')
             ->leftJoin('phone_contacts', 'contacts.id', '=', 'phone_contacts.contact_id')
             ->select(
-                'contacts.name',
-                'contacts.first_surname',
-                'contacts.second_surname',
+                'contacts.name as contact_name',
+                'contacts.first_surname as contact_fs',
+                'contacts.second_surname as contact_ss',
                 'contacts.contact_type',
                 'phone_contacts.phone_number',
                 'addresses.province',
@@ -149,9 +149,9 @@ class ContactQuery
                 'addresses.postal_code',
                 'addresses.street',
                 'addresses.number',
-                'beneficiaries.name',
-                'beneficiaries.first_surname',
-                'beneficiaries.second_surname',
+                'beneficiaries.name as beneficiary_name',
+                'beneficiaries.first_surname as beneficiary_fs',
+                'beneficiaries.second_surname as beneficiary_ss',
                 'beneficiaries.dni',
             )
             ->get();
