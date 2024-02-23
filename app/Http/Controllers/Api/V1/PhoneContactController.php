@@ -5,117 +5,63 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\PhoneContact;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PhoneContactRequest;
-use App\Http\Resources\PhoneContactResource;
 use App\Models\Contact;
-use Illuminate\Http\Request;
+use App\Queries\PhoneContactQuery;
 
 class PhoneContactController extends Controller
 {
     public function index()
     {
-        $phoneContacts = PhoneContactResource::collection(PhoneContact::all());
+        $response = PhoneContactQuery::getAllPhonesContact();
 
-        if ($phoneContacts->isEmpty()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se Encontraron Teléfonos de Contactos!',
-                'data' => [],
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Estos son los Teléfonos de los Contactos!',
-            'data' => $phoneContacts,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
 
+    
     public function store(PhoneContactRequest $request)
     {
-        $phoneContact = PhoneContact::create($request->validated());
+        $response = PhoneContactQuery::createPhoneContact($request);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Añadido Nuevo Teléfono para el Contacto!',
-            'data' => new PhoneContactResource($phoneContact),
-        ], 201);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function show(PhoneContact $phoneContact)
     {
-        if (is_null($phoneContact)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono del Contacto!',
-            ], 404);
-        }
+        $response = PhoneContactQuery::showPhoneContact($phoneContact);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Teléfono Encontrado!',
-            'data' => new PhoneContactResource($phoneContact),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function update(PhoneContactRequest $request, PhoneContact $phoneContact)
     {
-        if (is_null($phoneContact)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono del Contacto para Actualizar!',
-            ], 404);
-        }
+        $response = PhoneContactQuery::updatePhoneContact($request, $phoneContact);
 
-        $phoneContact->update($request->all());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Teléfono de Contacto Actualizado!',
-            'data' => new PhoneContactResource($phoneContact),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function destroy(PhoneContact $phoneContact)
     {
-        if (is_null($phoneContact)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono del Contacto para Eliminar!',
-            ], 404);
-        }
+        $response = PhoneContactQuery::deletePhoneContact($phoneContact);
 
-        $phoneContact->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Teléfono de Contacto Eliminado!',
-            'data' => $phoneContact,
-        ], 204);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function contactPhone(Contact $contact)
     {
-        if (is_null($contact)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado al Contacto con Teléfono!',
-            ], 404);
-        }
+        $response = PhoneContactQuery::getContactPhone($contact);
 
-        $contactPhone = PhoneContactResource::collection($contact->phoneContacts);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Teléfono de Contactp Encontrado!',
-            'data' => $contactPhone,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function error()
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => '¡Ha Ocurrido un Error con los Métodos del Controlador para los Teléfonos de Contacto!',
-        ], 400);
+        $response = PhoneContactQuery::errorHandler();
+
+        return response()->json($response->data, $response->status);
     }
 }
