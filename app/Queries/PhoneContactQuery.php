@@ -151,7 +151,7 @@ class PhoneContactQuery
             'message' => '!Teléfono de Contactp Encontrado!',
             'data' => $contactPhone,
         ];
-        $response->status = 204;
+        $response->status = 200;
 
         return $response;
     }

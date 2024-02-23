@@ -151,7 +151,7 @@ class PhoneUserQuery
             'message' => '!Teléfono de Usuario Encontrado!',
             'data' => $userPhone,
         ];
-        $response->status = 204;
+        $response->status = 200;
 
         return $response;
     }

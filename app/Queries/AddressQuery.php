@@ -151,7 +151,7 @@ class AddressQuery
             'message' => '!Dirección del Beneficiario Encontrado!',
             'data' => $beneficiaryAddress,
         ];
-        $response->status = 204;
+        $response->status = 200;
 
         return $response;
     }
@@ -178,7 +178,7 @@ class AddressQuery
             'message' => '!Dirección del Contacto Encontrado!',
             'data' => $contactAddress,
         ];
-        $response->status = 204;
+        $response->status = 200;
 
         return $response;
     }

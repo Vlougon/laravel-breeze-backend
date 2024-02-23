@@ -152,7 +152,7 @@ class PhoneBeneficiaryQuery
             'message' => '!Teléfono de Beneficiario Encontrado!',
             'data' => $beneficiaryPhone,
         ];
-        $response->status = 204;
+        $response->status = 200;
 
         return $response;
     }
