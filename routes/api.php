@@ -85,7 +85,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('firstbeneficiary', [BeneficiaryController::class, 'firstBeneficiary']);
 
         // Special Routes
-        Route::get('ultimateUser', [UserController::class, 'ultimateUser']);
+        Route::get('ultimateuser', [UserController::class, 'ultimateUser']);
 
+        Route::get('ultimatereminder', [ReminderController::class, 'ultimateReminder']);
     });
 });
