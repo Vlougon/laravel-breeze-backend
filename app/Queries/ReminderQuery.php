@@ -130,6 +130,7 @@ class ReminderQuery
         return $response;
     }
 
+
     public static function ultimateReminderData()
     {
         $reminder = DB::table('reminders')
@@ -153,7 +154,7 @@ class ReminderQuery
 
         $response->data = [
             'status' => 'success',
-            'message' => '¡Mostrando los Datos más Importantes de los Usuarios!',
+            'message' => '¡Mostrando los Datos más Importantes de los Recordatorios!',
             'data' => $reminder,
         ];
         $response->status = 200;
@@ -161,6 +162,7 @@ class ReminderQuery
         return $response;
     }
 
+    
     public static function errorHandler()
     {
         $response = new stdClass();

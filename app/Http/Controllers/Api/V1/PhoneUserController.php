@@ -5,116 +5,63 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\PhoneUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PhoneUserRequest;
-use App\Http\Resources\PhoneUserResource;
 use App\Models\User;
+use App\Queries\PhoneUserQuery;
 
 class PhoneUserController extends Controller
 {
     public function index()
     {
-        $phoneUsers = PhoneUserResource::collection(PhoneUser::all());
+        $response = PhoneUserQuery::getAllPhonesUser();
 
-        if ($phoneUsers->isEmpty()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se Encontraron Teléfonos de Usuarios!',
-                'data' => [],
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Estos son los Teléfono de los Usuarios!',
-            'data' => $phoneUsers,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function store(PhoneUserRequest $request)
     {
-        $phoneUser = PhoneUser::create($request->validated());
+        $response = PhoneUserQuery::createPhoneUser($request);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Añadido Nuevo Teléfono para el Usuario!',
-            'data' => new PhoneUserResource($phoneUser),
-        ], 201);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function show(PhoneUser $phoneUser)
     {
-        if (is_null($phoneUser)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono del Usuario!',
-            ], 404);
-        }
+        $response = PhoneUserQuery::showPhoneUser($phoneUser);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Teléfono Encontrado!',
-            'data' => new PhoneUserResource($phoneUser),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function update(PhoneUserRequest $request, PhoneUser $phoneUser)
     {
-        if (is_null($phoneUser)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono de Usuario para Actualizar!',
-            ], 404);
-        }
+        $response = PhoneUserQuery::updatePhoneUser($request, $phoneUser);
 
-        $phoneUser->update($request->all());
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Teléfono de Usuario Actualizado!',
-            'data' => new PhoneUserResource($phoneUser),
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function destroy(PhoneUser $phoneUser)
     {
-        if (is_null($phoneUser)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado el Teléfono de Usuario para Eliminar!',
-            ], 404);
-        }
+        $response = PhoneUserQuery::deletePhoneUser($phoneUser);
 
-        $phoneUser->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '¡Teléfono de Usuario Eliminado!',
-            'data' => $phoneUser,
-        ], 204);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function userPhone(User $user)
     {
-        if (is_null($user)) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => '¡No se ha encontrado al Usuairo con Teléfono!',
-            ], 404);
-        }
+        $response = PhoneUserQuery::getUserPhone($user);
 
-        $userPhone = PhoneUserResource::collection($user->phoneUsers);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => '!Teléfono de Usuario Encontrado!',
-            'data' => $userPhone,
-        ], 200);
+        return response()->json($response->data, $response->status);
     }
+
 
     public function error()
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => '¡Ha Ocurrido un Error con los Métodos del Controlador para los Teléfonos de Usuarios!',
-        ], 400);
+        $response = PhoneUserQuery::errorHandler();
+
+        return response()->json($response->data, $response->status);
     }
 }

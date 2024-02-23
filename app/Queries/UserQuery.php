@@ -140,6 +140,7 @@ class UserQuery
         return $response;
     }
 
+
     public static function ultimateUserData()
     {
         $user = DB::table('users')
@@ -159,6 +160,7 @@ class UserQuery
         return $response;
     }
 
+    
     public static function errorHandler()
     {
         $response = new stdClass();
