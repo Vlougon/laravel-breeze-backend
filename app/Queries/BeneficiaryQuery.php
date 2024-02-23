@@ -207,12 +207,11 @@ class BeneficiaryQuery
     public static function ultimateBeneficiaryData()
     {
         $beneficiaries = DB::table('beneficiaries')
-            ->join('beneficiary_contacts', 'beneficiaries.id', '=', 'beneficiary_contacts.beneficiary_id')
-            ->join('contacts', 'beneficiary_contacts.contact_id', '=', 'contacts.id')
             ->leftJoin('medical_datas', 'beneficiaries.id', '=', 'medical_datas.beneficiary_id')
             ->leftJoin('addresses', 'beneficiaries.id', '=', 'addresses.addressable_id')
             ->leftJoin('phone_beneficiaries', 'beneficiaries.id', '=', 'phone_beneficiaries.beneficiary_id')
             ->select(
+                'beneficiaries.id',
                 'beneficiaries.name as beneficiary_name',
                 'beneficiaries.first_surname as beneficiary_fs',
                 'beneficiaries.second_surname as beneficiary_ss',
@@ -242,10 +241,6 @@ class BeneficiaryQuery
                 'medical_datas.police_station_on_town',
                 'medical_datas.outpatient_clinic_on_town',
                 'medical_datas.ambulance_on_town',
-                'contacts.name as contact_name',
-                'contacts.first_surname as contact_fs',
-                'contacts.second_surname as contact_ss',
-                'contacts.contact_type',
             )
             ->get();
         $response = new stdClass();

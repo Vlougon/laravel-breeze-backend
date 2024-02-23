@@ -137,6 +137,7 @@ class ReminderQuery
             ->join('users', 'reminders.user_id', '=', 'users.id')
             ->join('beneficiaries', 'reminders.beneficiary_id', '=', 'beneficiaries.id')
             ->select(
+                'reminders.id',
                 'reminders.title',
                 'reminders.start_date',
                 'reminders.start_time',
@@ -147,6 +148,8 @@ class ReminderQuery
                 'users.email',
                 'users.role',
                 'beneficiaries.name as beneficiary_name',
+                'beneficiaries.first_surname',
+                'beneficiaries.second_surname',
             )
             ->get();
         $response = new stdClass();

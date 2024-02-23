@@ -145,7 +145,7 @@ class UserQuery
     {
         $users = DB::table('users')
             ->leftJoin('phone_users', 'users.id', '=', 'phone_users.user_id')
-            ->select('users.name', 'users.email', 'users.role', 'phone_users.phone_number')
+            ->select('users.id', 'users.name', 'users.email', 'users.role', 'phone_users.phone_number')
             ->get();
         $response = new stdClass();
 

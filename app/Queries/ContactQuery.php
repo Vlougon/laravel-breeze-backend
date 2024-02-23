@@ -139,6 +139,7 @@ class ContactQuery
             ->leftJoin('addresses', 'contacts.id', '=', 'addresses.addressable_id')
             ->leftJoin('phone_contacts', 'contacts.id', '=', 'phone_contacts.contact_id')
             ->select(
+                'contacts.id',
                 'contacts.name as contact_name',
                 'contacts.first_surname as contact_fs',
                 'contacts.second_surname as contact_ss',

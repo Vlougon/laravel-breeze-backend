@@ -137,6 +137,7 @@ class CallQuery
             ->join('users', 'calls.user_id', '=', 'users.id')
             ->join('beneficiaries', 'calls.beneficiary_id', '=', 'beneficiaries.id')
             ->select(
+                'calls.id',
                 'calls.date',
                 'calls.time',
                 'calls.duration',
@@ -186,6 +187,7 @@ class CallQuery
             ->join('users', 'calls.user_id', '=', 'users.id')
             ->join('beneficiaries', 'calls.beneficiary_id', '=', 'beneficiaries.id')
             ->select(
+                'calls.id',
                 'calls.date',
                 'calls.time',
                 'calls.duration',
@@ -236,6 +238,7 @@ class CallQuery
             ->join('users', 'calls.user_id', '=', 'users.id')
             ->join('beneficiaries', 'calls.beneficiary_id', '=', 'beneficiaries.id')
             ->select(
+                'calls.id',
                 'calls.date',
                 'calls.time',
                 'calls.duration',
