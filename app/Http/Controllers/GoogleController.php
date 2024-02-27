@@ -29,6 +29,6 @@ class GoogleController extends Controller
 
         Auth::login($user);
 
-        return redirect('https://acorayreact.informaticamajada.es/login');
+        return redirect('https://localhost:3000/login');
     }
 }

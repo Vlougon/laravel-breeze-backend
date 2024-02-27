@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*', 'OPTIONS'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'https://acorayreact.informaticamajada.es')],
+    'allowed_origins' => [env('FRONTEND_URL', 'https://localhost:3000')],
 
     'allowed_origins_patterns' => [],
 
